@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-deployment
+  labels:
+    app: code
+spec:
+  selector:
+    matchLabels:
+      app: code
+  template:
+    metadata:
+      labels:
+        app: code
+    spec:
+      containers:
+      - name: code
+        image: code:local
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000

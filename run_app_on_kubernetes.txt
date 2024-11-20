@@ -1,0 +1,48 @@
+- get all the files as shown in this directory: maybe change the deployment for Openshift after uploading the image to docker.io so that it can pull the image from there instead of having to give it locally. If done so, remove the "imagePullPolicy: Never" bit.
+
+- sudo docker build . -t code:local
+--> builds the image from the dockerfile using requirements.txt and main.py
+
+- sudo docker run -p 8000:8000 code:local 
+--> would run a container with the specified image and give access to port 8000. Now you should be able to connect to the container from 127.0.0.1:8000 and see the response from the get request
+
+- sudo docker save code:local > code.tar
+--> generates a .tar file from the image code:local to be used by kubernetes
+
+---------------------------------------------------------------------------------------
+only for local deployment on microk8s
+
+- sudo microk8s ctr image import code.tar
+--> imports the image to microk8s so that it doesn't have to search on docker.io
+
+- sudo microk8s kubectl apply -f deployment.yaml
+--> creates a deployment from the image code.tar
+
+- sudo microk8s kubectl get pods
+--> shows the pod running
+
+- sudo microk8s kubectl apply -f service.yaml (only for microk8s, in openshift this would need to be a standard service and then also need a route)
+--> starts the service allowing access to the application
+
+- sudo microk8s kubectl get service
+--> shows the active service
+
+The service is not accessible from outside the cluster on a seperate ip address. You can however access it under localhost (or 127.0.0.1) using the forwarded ports shown using sudo microk8s kubectl get service. For example the output of the aforementioned command could be:
+
+NAME           TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+code-service   LoadBalancer   10.152.183.17   <pending>     8000:31915/TCP   54s
+
+This means that the service is accessible from inside the cluster under the stated cluster ip
+from outside, use localhost:31915 (as this is the forwarded port)
+
+---------------------------------------------------------------------------------------
+useful links:
+deploy fastapi app to kubernetes
+https://dev.to/bravinsimiyu/how-to-dockerize-and-deploy-a-fast-api-application-to-kubernetes-cluster-35a9
+use local images in microk8s:
+https://microk8s.io/docs/registry-images
+
+
+See this link for making the docker image available in openshift:
+https://cookbook.openshift.org/image-registry-and-image-streams/how-do-i-push-an-image-to-the-internal-image-registry.html
+
