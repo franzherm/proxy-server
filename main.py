@@ -23,6 +23,7 @@ def fetch_test_file():
 
 @app.get("/file")
 def fetch_file():
+    print("API_KEY", API_KEY)
     headers = {"X-JFrog-Art-API": f"{API_KEY}"}
     answer = requests.get(f"{URL}", headers=headers)
     if answer.status_code != 200:
