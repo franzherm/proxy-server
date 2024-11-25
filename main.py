@@ -8,6 +8,7 @@ app = FastAPI()
 # API_KEY = os.getenv("API_KEY")
 TEST_URL = "https://jsonplaceholder.typicode.com/todos/1"
 URL = os.environ.get("ARTIFACT_URL", None)  # follows the scheme: https://<server-url>/artifactory/path/to/file/example_file.csv
+USER = os.environ.get("USER", None)
 API_KEY = os.environ.get("JFROG_API_KEY", None)
 
 
@@ -23,9 +24,11 @@ def fetch_test_file():
 
 @app.get("/file")
 def fetch_file():
+    #headers = {"X-JFrog-Art-API": f"{API_KEY}"}
+    print("User", User)
+    print("URL", URL)
     print("API_KEY", API_KEY)
-    headers = {"X-JFrog-Art-API": f"{API_KEY}"}
-    answer = requests.get(f"{URL}", headers=headers)
+    answer = requests.get(f"{URL}", auth=(USER, API_KEY))
     if answer.status_code != 200:
         raise HTTPException(status_code=answer.status_code, detail="Error fetching file")
 
