@@ -25,7 +25,7 @@ def fetch_test_file():
 @app.get("/file")
 def fetch_file():
     #headers = {"X-JFrog-Art-API": f"{API_KEY}"}
-    print("User", User)
+    print("USER", USER)
     print("URL", URL)
     print("API_KEY", API_KEY)
     answer = requests.get(f"{URL}", auth=(USER, API_KEY))
