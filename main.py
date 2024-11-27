@@ -28,7 +28,8 @@ def fetch_file():
     print("USER", USER)
     print("URL", URL)
     print("API_KEY", API_KEY)
-    answer = requests.get(f"{URL}", headers=headers)
+    session = requests.session()
+    answer = session.get(f"{URL}", headers=headers)
     if answer.status_code != 200:
         raise HTTPException(status_code=answer.status_code, detail="Error fetching file")
 
