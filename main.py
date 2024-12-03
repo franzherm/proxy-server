@@ -26,7 +26,7 @@ def fetch_test_file():
 def fetch_file():
     headers = {"X-JFrog-Art-API": f"{API_KEY}"}
     session = requests.session()
-    answer = session.get(f"{URL}", headers=headers, validate=False)
+    answer = session.get(f"{URL}", headers=headers, verify=False)
     if answer.status_code != 200:
         raise HTTPException(status_code=answer.status_code, detail="Error fetching file")
 
