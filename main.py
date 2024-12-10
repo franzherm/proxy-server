@@ -34,9 +34,9 @@ def fetch_file():
 
     return Response(content=answer.content, media_type=answer.headers["content-type"])
 
-@app.get("/file")
+@app.get("/file/{filename}")
 async def fetch_local_file(filename: str = "default_file.csv"):
-    return FileResponse(f"{FILE_ROOT_PATH}/{filename}")
+    return FileResponse(f"{FILE_ROOT_PATH}/{filename}", media_type='application/octet-stream', filename=filename)
 
 @app.put("/upload")
 async def upload_local_file(file: UploadFile):
