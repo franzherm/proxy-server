@@ -39,7 +39,7 @@ async def fetch_local_file(filename: str = "default_file.csv"):
     return FileResponse(f"{FILE_ROOT_PATH}/{filename}")
 
 @app.put("/upload")
-async def fetch_local_file(file: UploadFile):
+async def upload_local_file(file: UploadFile):
     try:
         contents = file.file.read()
         with open(f"{FILE_ROOT_PATH}/{file.filename}", 'wb') as f:
