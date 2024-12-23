@@ -58,9 +58,9 @@ async def upload_local_file(file: UploadFile):
     return {"message": f"Successfully uploaded {file.filename}"}
 
 @app.delete("/delete/{filename}")
-async def upload_local_file(filename: str):
+async def delete_local_file(filename: str):
     try:
-        os.remove("test")
+        os.remove("/".join([FILE_ROOT_PATH,filename])
         return Response(content=f"File {filename} was deleted")
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="File not found")
