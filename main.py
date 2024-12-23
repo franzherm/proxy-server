@@ -34,6 +34,12 @@ def fetch_file():
 
     return Response(content=answer.content, media_type=answer.headers["content-type"])
 
+@app.get("/files")
+def get_all_file_names():
+    file_list = [filename for filename in os.listdir(path=FILE_ROOT_PATH) if os.path.isfile("/".join([FILE_ROOT_PATH, filename]))]
+    return_str = "\n".join(file_list)
+    return Response(content=return_str)
+
 @app.get("/file/{filename}")
 async def fetch_local_file(filename: str = "default_file.csv"):
     return FileResponse(f"{FILE_ROOT_PATH}/{filename}", media_type='application/octet-stream', filename=filename)
@@ -50,3 +56,14 @@ async def upload_local_file(file: UploadFile):
         file.file.close()
 
     return {"message": f"Successfully uploaded {file.filename}"}
+
+@app.delete("/delete/{filename}")
+async def upload_local_file(filename: str):
+    try:
+        os.remove("test")
+        return Response(content=f"File {filename} was deleted")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="File not found")
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=e.__str__())
+
